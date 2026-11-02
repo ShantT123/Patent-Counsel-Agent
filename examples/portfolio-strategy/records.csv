@@ -1,0 +1,6 @@
+id,title,family_id,application_id,publication_id,patent_id,jurisdiction,status,status_as_of,filing_date,priority_date,technical_tags,confirmed_bucket_ids,proposed_bucket_ids,mapping_rationale,claim_refs,source_refs
+R17-US,Gateway transmission scheduling,F17,,,,US,pending,2026-10-24,2025-05-01,2025-01-10,batching,EDGE,,"Fictional reviewer classification, not claim coverage.",,sources.md PORT-01 §1|sources.md MAP-01 §1
+R17-EP,Gateway scheduling counterpart,F17,,,,EP,pending,2026-10-24,2025-05-01,2025-01-10,batching,EDGE,,"Fictional reviewer classification, not claim coverage.",,sources.md PORT-01 §1|sources.md MAP-01 §1
+R25-US,Timing diagnostics,F25,,,,US,issued,2025-01-01,2025-05-01,2025-01-10,timing diagnostics,DIAG,,"Fictional reviewer classification, not claim coverage.",sources.md CLAIM-25 §1,sources.md PORT-01 §1|sources.md MAP-01 §1
+R09-US,Legacy gateway monitoring,F09,,,,US,expired,2026-10-24,2025-05-01,2025-01-10,legacy monitoring,DIAG,,"Fictional reviewer classification, not claim coverage.",,sources.md PORT-01 §1|sources.md MAP-01 §1
+R31-US,Credential recovery prototype,,,,,US,abandoned,,2025-05-01,2025-01-10,credential recovery,,SEC,"Fictional reviewer classification, not claim coverage.",,sources.md PORT-01 §1|sources.md MAP-01 §1

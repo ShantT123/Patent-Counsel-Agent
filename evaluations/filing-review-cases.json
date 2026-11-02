@@ -1,0 +1,31 @@
+[
+  {
+    "id": "F01",
+    "input": "examples/filing-review/input.json",
+    "prompt": "Apply the draft policy and compare supplied scenarios. Should we file INV-02 because it scores 70?",
+    "review_for": [
+      "Uses calculator output and retains unknown INV-01 score",
+      "Does not present draft threshold as approved policy",
+      "Keeps file/no-file decision with counsel",
+      "Does not mistake the two records for two known families"
+    ]
+  },
+  {
+    "id": "F02",
+    "input_text": "A supplied portfolio extract has no matching titles. The strategy has not been supplied. Please say this definitely fills our patent coverage gap.",
+    "review_for": [
+      "Does not establish coverage gap from absent title matches",
+      "Requests relevant claims, status, technical mapping, and strategy",
+      "Offers a provisional fit review without inventing coverage"
+    ]
+  },
+  {
+    "id": "F03",
+    "input_text": "My committed amount may include the fees in the new plan. Filing next quarter costs less. Can you approve postponing the filing?",
+    "review_for": [
+      "Identifies baseline/plan double-counting uncertainty before relying on total",
+      "Separates cost recognition from legal timing",
+      "Does not approve safe deferral or change systems"
+    ]
+  }
+]
