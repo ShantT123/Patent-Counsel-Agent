@@ -1,0 +1,480 @@
+{
+  "schema_version": "1",
+  "review_id": "FICTIONAL-PORTFOLIO-DEMO",
+  "as_of": "2026-11-22",
+  "review_mode": "portfolio",
+  "document": {
+    "title": "Lantern \u00b7 fictional portfolio review"
+  },
+  "orientation": "A fictional cache-update invention checks generation numbers before accepting updates. This example demonstrates how the dashboard separates topics mapped to example claims from ideas described only in an example specification. None of the records are real patents or legal findings.",
+  "scope": {
+    "inspected_materials": [
+      "Manually authored illustrative claim summaries and descriptive notes"
+    ],
+    "research_status": "Unavailable in this demonstration",
+    "extraction_limits": "No original patent documents exist for these fictional identifiers."
+  },
+  "sources": [
+    {
+      "id": "S-DEMO",
+      "title": "Fictional portfolio exercise",
+      "kind": "disclosure",
+      "locator": "Illustrative claims A1 and B1; not real patent claims",
+      "inspection_status": "Manually authored fixture; no external research"
+    }
+  ],
+  "research_log": [],
+  "glossary": [
+    {
+      "id": "G-001",
+      "original_wording": "Generation number",
+      "type": "term_of_art",
+      "plain_english_definition": "A number used to order successive versions of data.",
+      "role_in_invention": "Orders updates before acceptance.",
+      "evidence_status": "disclosed",
+      "evidence": [
+        {
+          "source_id": "S-DEMO",
+          "locator": "A1",
+          "excerpt": "reject a lower generation update",
+          "supports": "Illustrative update-ordering mechanism"
+        }
+      ],
+      "meaning_confidence": {
+        "level": "high",
+        "rationale": "Illustrative mapping to the fictional notes.",
+        "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+      },
+      "inventor_question": null
+    },
+    {
+      "id": "G-002",
+      "original_wording": "Lantern",
+      "type": "internal_name",
+      "plain_english_definition": "The fictional team name for the update-checking component.",
+      "role_in_invention": "Orders updates before acceptance.",
+      "evidence_status": "disclosed",
+      "evidence": [
+        {
+          "source_id": "S-DEMO",
+          "locator": "A1",
+          "excerpt": "reject a lower generation update",
+          "supports": "Illustrative update-ordering mechanism"
+        }
+      ],
+      "meaning_confidence": {
+        "level": "high",
+        "rationale": "Illustrative mapping to the fictional notes.",
+        "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+      },
+      "inventor_question": null
+    },
+    {
+      "id": "G-003",
+      "original_wording": "Lower-generation rejection",
+      "type": "unnamed_concept",
+      "plain_english_definition": "Working label: refuse an update older than the newest accepted update.",
+      "role_in_invention": "Orders updates before acceptance.",
+      "evidence_status": "disclosed",
+      "evidence": [
+        {
+          "source_id": "S-DEMO",
+          "locator": "A1",
+          "excerpt": "reject a lower generation update",
+          "supports": "Illustrative update-ordering mechanism"
+        }
+      ],
+      "meaning_confidence": {
+        "level": "medium",
+        "rationale": "Illustrative mapping to the fictional notes.",
+        "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+      },
+      "inventor_question": null
+    },
+    {
+      "id": "G-004",
+      "original_wording": "Multi-region replication",
+      "type": "uncertain",
+      "plain_english_definition": "Maintain data in more than one geographic region. The example claim summaries do not establish the coordination mechanism.",
+      "role_in_invention": "Deployment context.",
+      "evidence_status": "disclosed",
+      "evidence": [
+        {
+          "source_id": "S-DEMO",
+          "locator": "A1",
+          "excerpt": "reject a lower generation update",
+          "supports": "Illustrative update-ordering mechanism"
+        }
+      ],
+      "meaning_confidence": {
+        "level": "low",
+        "rationale": "Illustrative mapping to the fictional notes.",
+        "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+      },
+      "inventor_question": null
+    }
+  ],
+  "thesaurus": [
+    {
+      "glossary_id": "G-001",
+      "relations": [
+        {
+          "target_wording": "version identifier",
+          "relation_type": "related_mechanism",
+          "similarities_and_differences": "A related search concept, not a claim of exact equivalence.",
+          "confidence": {
+            "level": "medium",
+            "rationale": "Proposed comparison.",
+            "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+          },
+          "evidence": [
+            {
+              "source_id": "S-DEMO",
+              "locator": "A1",
+              "excerpt": "reject a lower generation update",
+              "supports": "Illustrative update-ordering mechanism"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "glossary_id": "G-002",
+      "relations": [
+        {
+          "target_wording": "update processing",
+          "relation_type": "related_mechanism",
+          "similarities_and_differences": "A related search concept, not a claim of exact equivalence.",
+          "confidence": {
+            "level": "medium",
+            "rationale": "Proposed comparison.",
+            "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+          },
+          "evidence": [
+            {
+              "source_id": "S-DEMO",
+              "locator": "A1",
+              "excerpt": "reject a lower generation update",
+              "supports": "Illustrative update-ordering mechanism"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "glossary_id": "G-003",
+      "relations": [
+        {
+          "target_wording": "update processing",
+          "relation_type": "related_mechanism",
+          "similarities_and_differences": "A related search concept, not a claim of exact equivalence.",
+          "confidence": {
+            "level": "medium",
+            "rationale": "Proposed comparison.",
+            "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+          },
+          "evidence": [
+            {
+              "source_id": "S-DEMO",
+              "locator": "A1",
+              "excerpt": "reject a lower generation update",
+              "supports": "Illustrative update-ordering mechanism"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "glossary_id": "G-004",
+      "relations": [
+        {
+          "target_wording": "update processing",
+          "relation_type": "related_mechanism",
+          "similarities_and_differences": "A related search concept, not a claim of exact equivalence.",
+          "confidence": {
+            "level": "medium",
+            "rationale": "Proposed comparison.",
+            "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+          },
+          "evidence": [
+            {
+              "source_id": "S-DEMO",
+              "locator": "A1",
+              "excerpt": "reject a lower generation update",
+              "supports": "Illustrative update-ordering mechanism"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "technology_categories": [
+    {
+      "id": "T-001",
+      "name": "Cache update ordering",
+      "role": "primary_mechanism",
+      "description": "Identify how the document discusses cache update ordering.",
+      "glossary_ids": [
+        "G-001",
+        "G-002",
+        "G-003"
+      ],
+      "fit_confidence": {
+        "level": "high",
+        "rationale": "Explicit in fictional notes.",
+        "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+      },
+      "supporting_evidence": [
+        {
+          "source_id": "S-DEMO",
+          "locator": "A1",
+          "excerpt": "reject a lower generation update",
+          "supports": "Illustrative update-ordering mechanism"
+        }
+      ],
+      "contrary_evidence": "No full implementation provided."
+    },
+    {
+      "id": "T-002",
+      "name": "Geographic replication",
+      "role": "supporting",
+      "description": "Identify how the document discusses geographic replication.",
+      "glossary_ids": [
+        "G-004"
+      ],
+      "fit_confidence": {
+        "level": "high",
+        "rationale": "Explicit in fictional notes.",
+        "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+      },
+      "supporting_evidence": [
+        {
+          "source_id": "S-DEMO",
+          "locator": "A1",
+          "excerpt": "reject a lower generation update",
+          "supports": "Illustrative update-ordering mechanism"
+        }
+      ],
+      "contrary_evidence": "No full implementation provided."
+    }
+  ],
+  "taxonomy": {
+    "status": "proposed",
+    "buckets": [
+      {
+        "id": "B-001",
+        "name": "Distributed data infrastructure",
+        "definition": "Ordering and replication mechanisms in distributed data systems."
+      }
+    ],
+    "mappings": [
+      {
+        "category_id": "T-001",
+        "bucket_id": "B-001",
+        "status": "proposed",
+        "confidence": {
+          "level": "medium",
+          "rationale": "Awaiting review.",
+          "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+        }
+      },
+      {
+        "category_id": "T-002",
+        "bucket_id": "B-001",
+        "status": "proposed",
+        "confidence": {
+          "level": "medium",
+          "rationale": "Awaiting review.",
+          "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+        }
+      }
+    ]
+  },
+  "related_fields": [
+    {
+      "id": "R-001",
+      "parent_category_id": "T-001",
+      "name": "Message ordering",
+      "relationship_type": "shared_problem",
+      "explanation": "Similar ordering or replication constraints create a research bridge.",
+      "differences": "Message delivery and durable database storage have different guarantees.",
+      "relationship_confidence": {
+        "level": "medium",
+        "rationale": "Related constraint, not an equivalent implementation.",
+        "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+      },
+      "generalized_search_phrases": [
+        "distributed update ordering"
+      ],
+      "source_ids": [
+        "S-DEMO"
+      ]
+    },
+    {
+      "id": "R-002",
+      "parent_category_id": "T-002",
+      "name": "Distributed databases",
+      "relationship_type": "shared_problem",
+      "explanation": "Similar ordering or replication constraints create a research bridge.",
+      "differences": "Message delivery and durable database storage have different guarantees.",
+      "relationship_confidence": {
+        "level": "medium",
+        "rationale": "Related constraint, not an equivalent implementation.",
+        "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+      },
+      "generalized_search_phrases": [
+        "distributed update ordering"
+      ],
+      "source_ids": [
+        "S-DEMO"
+      ]
+    }
+  ],
+  "organizations": [],
+  "organization_coverage": [
+    {
+      "category_id": "T-001",
+      "research_status": "unavailable",
+      "matched_organization_ids": [],
+      "remaining_gaps": "No organizations verified in this fixture."
+    },
+    {
+      "category_id": "T-002",
+      "research_status": "unavailable",
+      "matched_organization_ids": [],
+      "remaining_gaps": "No organizations verified in this fixture."
+    },
+    {
+      "category_id": "R-001",
+      "research_status": "unavailable",
+      "matched_organization_ids": [],
+      "remaining_gaps": "No organizations verified in this fixture."
+    },
+    {
+      "category_id": "R-002",
+      "research_status": "unavailable",
+      "matched_organization_ids": [],
+      "remaining_gaps": "No organizations verified in this fixture."
+    }
+  ],
+  "questions": [
+    {
+      "priority": 1,
+      "question": "How are generation numbers coordinated across regions?",
+      "affected_ids": [
+        "T-001"
+      ],
+      "why_it_matters": "Ordering assumptions are not specified."
+    }
+  ],
+  "limitations": [
+    "All records, claim identifiers, and statuses are fictional. No public research or legal assessment performed."
+  ],
+  "handoff": {
+    "status": "Illustrative only; not suitable for a real filing or coverage assessment."
+  },
+  "portfolio": {
+    "records": [
+      {
+        "document_id": "FICT-GRANT-A",
+        "document_type": "issued_patent",
+        "title": "Illustrative update-ordering grant",
+        "jurisdiction": "Fictional demonstration",
+        "status": "Illustrative issued status; not a real patent",
+        "reviewed_claim_version": "Fictional grant claims A1\u2013A2",
+        "source_ids": [
+          "S-DEMO"
+        ],
+        "claim_summaries": [
+          {
+            "claim": "A1",
+            "kind": "independent",
+            "summary": "Receive an update with a generation number, compare it with a stored highest number, and reject lower numbers.",
+            "source_locator": "S-DEMO A1"
+          },
+          {
+            "claim": "A2",
+            "kind": "dependent",
+            "summary": "Adds a key-specific stored highest number.",
+            "source_locator": "S-DEMO A2"
+          }
+        ],
+        "limitations": "Fictional grant document; no actual rights exist."
+      },
+      {
+        "document_id": "FICT-APP-B",
+        "document_type": "published_application",
+        "title": "Illustrative replication application",
+        "jurisdiction": "Fictional demonstration",
+        "status": "Illustrative application; current prosecution unknown",
+        "reviewed_claim_version": "Fictional published application claim B1",
+        "source_ids": [
+          "S-DEMO"
+        ],
+        "claim_summaries": [
+          {
+            "claim": "B1",
+            "kind": "independent",
+            "summary": "Replicate a record between two regional stores.",
+            "source_locator": "S-DEMO B1"
+          }
+        ],
+        "limitations": "Application claims are illustrative proposed subject matter, not granted rights."
+      }
+    ],
+    "category_mappings": [
+      {
+        "document_id": "FICT-GRANT-A",
+        "category_id": "T-001",
+        "basis": "claim_mapped",
+        "claim_locators": [
+          "S-DEMO A1",
+          "S-DEMO A2"
+        ],
+        "relevant_limitations": "Generation comparison and rejection required together.",
+        "confidence": {
+          "level": "medium",
+          "rationale": "Illustrative claim mapping only.",
+          "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+        },
+        "assessment_status": "proposed",
+        "reviewed_version": "Fictional grant claims A1\u2013A2"
+      },
+      {
+        "document_id": "FICT-GRANT-A",
+        "category_id": "T-002",
+        "basis": "description_only",
+        "claim_locators": [],
+        "supporting_sources": [
+          "S-DEMO background note"
+        ],
+        "limitations": "No regional replication limitation identified in A1\u2013A2."
+      },
+      {
+        "document_id": "FICT-APP-B",
+        "category_id": "T-002",
+        "basis": "claim_mapped",
+        "claim_locators": [
+          "S-DEMO B1"
+        ],
+        "confidence": {
+          "level": "medium",
+          "rationale": "Published application example.",
+          "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+        },
+        "limitations": "Proposed application subject matter, not issued rights."
+      },
+      {
+        "document_id": "FICT-APP-B",
+        "category_id": "T-001",
+        "basis": "unreviewed",
+        "claim_locators": [],
+        "limitations": "No complete claim set available."
+      }
+    ],
+    "gaps": [
+      "FICT-APP-B has no reviewed current amended claims or status source.",
+      "No real portfolio protection gap can be inferred from this example."
+    ]
+  }
+}

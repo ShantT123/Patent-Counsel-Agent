@@ -17,3 +17,9 @@ Initial intake skill, disclosure templates, fictional worked example, five behav
 - Add a self-contained five-report skill for terminology, thesaurus relationships, technology categories, related fields, and organizations.
 - Check existing technology buckets and propose a taxonomy when unavailable; use generalized public research by default.
 - Add report contract/template, fictional fallback example, and five proposed behavioral challenges. Independent behavioral evaluation remains outstanding.
+
+## Unreleased — HTML dashboard and explicit patent/portfolio review
+
+- Make offline HTML plus JSON the default disclosure-review deliverable; include a standard-library renderer with search, filters, evidence links, JSON download, and print support.
+- Explicitly support issued patents, published applications, claim versions, and consolidated portfolios; preserve document-specific claims and distinguish claim-mapped topics from description-only, potential, and unreviewed mappings.
+- Add a fictional two-document portfolio dashboard, renderer tests, and two proposed behavioral challenge cases. No legal-coverage scoring or automatic claim analysis is supplied by the renderer.

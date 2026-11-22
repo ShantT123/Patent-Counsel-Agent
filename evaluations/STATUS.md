@@ -32,3 +32,7 @@ The offline package checker passed during preparation, including source-locator 
 ## Invention disclosure review
 
 Five proposed challenge cases are in `disclosure-review-cases.json`. The Lantern worked example is manually authored and document-only; it does not demonstrate live public research. Independent model runs, attorney scoring, extraction recall, confidence calibration, research coverage, and cross-host installation remain unmeasured. Package checks validate required files, case structure, metadata, links, and example source locators only.
+
+## HTML dashboard and patent/portfolio extension
+
+Seven disclosure-review behavioral cases are now defined, including two new patent/portfolio challenges. The dashboard fixture is manually authored and entirely fictional. Eight renderer tests check data preservation, links, unsafe content handling, offline assets, claim-locator requirements, input preservation, and empty reports. Browser interaction smoke checks are performed separately on the fictional dashboard and the local published-application review; they test presentation, not substantive claim interpretation. Independent blinded evaluation of patent analysis, current legal status, and portfolio mapping remains outstanding.
