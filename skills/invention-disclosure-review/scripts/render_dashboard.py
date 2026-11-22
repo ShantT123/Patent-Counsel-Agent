@@ -11,6 +11,9 @@ ROOT = Path(__file__).resolve().parent
 ARRAYS = ('sources', 'research_log', 'glossary', 'thesaurus', 'technology_categories',
           'related_fields', 'organizations', 'organization_coverage', 'questions', 'limitations')
 REQUIRED = ('schema_version', 'review_id', 'as_of', 'scope', 'taxonomy', 'handoff') + ARRAYS
+SUMMARY_FIELDS = (('overview', 'The idea'), ('technology_fit', 'Technology & portfolio fit'),
+                  ('key_findings', 'Key findings'), ('uncertainties', 'What remains uncertain'),
+                  ('next_steps', 'Next steps'))
 LEVELS = {'high', 'medium', 'low', 'unresolved'}
 
 
@@ -51,6 +54,23 @@ def validate(data):
         ids = [x.get('id') if isinstance(x, dict) else None for x in data[key]]
         if not all(isinstance(x, str) and x for x in ids) or len(set(ids)) != len(ids):
             raise ValueError(key + ' requires nonempty, unique string IDs')
+    if 'executive_summary' in data:
+        summary = data['executive_summary']
+        if not isinstance(summary, dict):
+            raise ValueError('executive_summary must be an object')
+        source_ids = {s['id'] for s in data['sources']}
+        for field, _ in SUMMARY_FIELDS:
+            items = summary.get(field)
+            if not isinstance(items, list) or not items:
+                raise ValueError('executive_summary.' + field + ' requires a nonempty array')
+            for item in items:
+                if not isinstance(item, dict) or not isinstance(item.get('text'), str) or not item['text'].strip():
+                    raise ValueError('Summary items require nonempty text')
+                if not isinstance(item.get('evidence'), list):
+                    raise ValueError('Summary items require an evidence array; use [] for an unsupported recommendation')
+                for ref in item['evidence']:
+                    if not isinstance(ref, dict) or ref.get('source_id') not in source_ids or not ref.get('locator'):
+                        raise ValueError('Summary evidence requires a known source ID and locator')
     if 'portfolio' in data:
         portfolio = data['portfolio']
         if not isinstance(portfolio, dict):
@@ -106,6 +126,54 @@ class Dashboard:
             return '<a href="' + escape(url) + '" target="_blank" rel="noopener noreferrer">' + escape(urlsplit(url).netloc + urlsplit(url).path) + '</a>'
         return escape(text)
 
+    def citations(self, record, caption='Sources cited here'):
+        # Only explicit source-reference fields create citations; prose is never parsed as markup.
+        refs = []
+        def collect(value):
+            if isinstance(value, dict):
+                if isinstance(value.get('source_id'), str):
+                    refs.append((value['source_id'], str(value.get('locator') or '')))
+                for key, child in value.items():
+                    if key in ('source_ids', 'supporting_source_ids') and isinstance(child, list):
+                        refs.extend((sid, '') for sid in child if isinstance(sid, str))
+                    else:
+                        collect(child)
+            elif isinstance(value, list):
+                for child in value:
+                    collect(child)
+        collect(record)
+        refs = list(dict.fromkeys(refs))
+        if not refs:
+            return ''
+        sources = {s['id']: s for s in self.data['sources']}
+        links = []
+        for sid, locator in refs:
+            source = sources.get(sid)
+            if source is None:
+                links.append(escape(sid) + ' (unresolved source)')
+                continue
+            title = source.get('title', sid)
+            text = sid + (' · ' + locator if locator else '')
+            link = '<a href="#' + self.anchors[sid] + '" title="' + escape(title) + '">' + escape(text) + '</a>'
+            url = safe_url(source.get('url')) or safe_url(source.get('locator'))
+            if url:
+                link += ' <a href="' + escape(url) + '" target="_blank" rel="noopener noreferrer" aria-label="' + escape('Open source: ' + title) + '">Open source</a>'
+            links.append('<span>' + link + '</span>')
+        return '<div class="citations"><strong>' + escape(caption) + ':</strong> ' + ' · '.join(links) + '</div>'
+
+    def executive_summary(self):
+        summary = self.data.get('executive_summary')
+        result = '<section id="executive-summary" class="executive-summary card"><span class="eyebrow">Start here · Quick read</span><h2>Executive summary</h2>'
+        if summary is None:
+            return result + '<p class="muted">This older report has no authored executive summary. Its supplied orientation follows; consult the detailed findings for evidence and uncertainties.</p>' + self.value(self.data.get('orientation', 'No orientation supplied.')) + '</section>'
+        result += '<div class="summary-grid">'
+        for field, title in SUMMARY_FIELDS:
+            result += '<div class="summary-block"><h3>' + title + '</h3>'
+            for item in summary[field]:
+                result += '<p>' + escape(item['text']) + '</p>' + self.citations(item)
+            result += '</div>'
+        return result + '</div><p class="muted summary-note">A quick orientation to this review. Source links support the nearby statements; recommendations are identified in the text. Full evidence and qualifications remain below.</p><a href="#technology_categories">Explore technologies</a> · <a href="#questions">Review questions</a> · <a href="#evidence">Source register</a></section>'
+
     def details(self, record):
         return '<details><summary>Full details and evidence</summary>' + self.value(record) + '</details>'
 
@@ -159,7 +227,7 @@ class Dashboard:
             g = next((g for g in self.data['glossary'] if g['id'] == rid), {})
             result += '<p class="muted">' + escape(g.get('original_wording', '')) + '</p>'
             for relation in record.get('relations', []):
-                result += '<div class="relation"><span class="pill">' + escape(label(relation.get('relation_type', 'related'))) + '</span><h4>' + escape(relation.get('target_wording', relation.get('target_glossary_id', 'Related concept'))) + '</h4><p>' + escape(relation.get('similarities_and_differences', relation.get('explanation', 'See full details.'))) + '</p></div>'
+                result += '<div class="relation"><span class="pill">' + escape(label(relation.get('relation_type', 'related'))) + '</span><h4>' + escape(relation.get('target_wording', relation.get('target_glossary_id', 'Related concept'))) + '</h4><p>' + escape(relation.get('similarities_and_differences', relation.get('explanation', 'See full details.'))) + '</p>' + self.citations(relation) + '</div>'
         elif collection == 'technology_categories':
             result += '<span class="pill">' + escape(label(record.get('role', 'unspecified'))) + '</span><p>' + escape(record.get('description', '')) + '</p>'
         elif collection == 'related_fields':
@@ -167,7 +235,9 @@ class Dashboard:
         else:
             result += '<p class="muted">' + escape(record.get('entity_type', 'Organization')) + '</p>'
             for match in record.get('category_matches', []):
-                result += '<div class="relation"><span class="pill">' + escape(label(match.get('role', 'technology_relevant'))) + '</span> ' + self.value(match.get('category_id')) + '<p>' + escape(match.get('concrete_activity', 'Activity not supplied')) + '</p><p class="muted">' + escape(match.get('limitations', '')) + '</p></div>'
+                result += '<div class="relation"><span class="pill">' + escape(label(match.get('role', 'technology_relevant'))) + '</span> ' + self.value(match.get('category_id')) + '<p>' + escape(match.get('concrete_activity', 'Activity not supplied')) + '</p><p class="muted">' + escape(match.get('limitations', '')) + '</p>' + self.citations(match) + '</div>'
+        if collection not in ('thesaurus', 'organizations'):
+            result += self.citations(record, 'Sources cited in this entry')
         return result + self.details(record) + '</article>'
 
     def section(self, key, title, subtitle):
@@ -192,7 +262,7 @@ class Dashboard:
         d = self.data
         document = d.get('document') or {}
         title = document.get('title', d['review_id']) if isinstance(document, dict) else d['review_id']
-        nav = [('overview', 'Overview'), ('glossary', 'Glossary'), ('thesaurus', 'Thesaurus'), ('technology_categories', 'Technologies'), ('related_fields', 'Related fields'), ('organizations', 'Organizations')]
+        nav = [('executive-summary', 'Executive summary'), ('overview', 'Overview'), ('glossary', 'Glossary'), ('thesaurus', 'Thesaurus'), ('technology_categories', 'Technologies'), ('related_fields', 'Related fields'), ('organizations', 'Organizations')]
         if 'portfolio' in d:
             nav.append(('portfolio', 'Portfolio map'))
         nav += [('questions', 'Review questions'), ('evidence', 'Sources & scope')]
@@ -205,6 +275,7 @@ class Dashboard:
         policy = "default-src 'none'; style-src 'unsafe-inline'; script-src 'sha256-" + base64.b64encode(js_hash).decode() + "'; connect-src 'none'; base-uri 'none'; form-action 'none'"
         out = ['<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="' + escape(policy) + '"><title>' + escape(title) + ' — Invention review</title><style>' + css + '</style></head><body>']
         out += ['<a class="skip" href="#main">Skip to report</a><aside><div class="brand"><span class="brand-mark">IR</span><div>Invention review<small>Technology intelligence</small></div></div><nav aria-label="Report sections">' + ''.join('<a href="#' + key + '">' + text + '</a>' for key, text in nav) + '</nav><p class="sidebar-note">Evidence stays visible.<br>Uncertainty stays explicit.</p></aside><main id="main"><header><div><span class="eyebrow">' + escape(d.get('review_mode', 'Invention disclosure review')) + '</span><h1>' + escape(title) + '</h1><p class="muted">' + escape(d['review_id']) + ' · As of ' + escape(d['as_of']) + '</p></div><div class="actions"><button id="download" type="button">Download JSON</button><button id="print" type="button">Print / save PDF</button></div></header>']
+        out.append(self.executive_summary())
         out += ['<section id="overview"><h2 class="sr-only">Overview</h2><div class="metrics">']
         for key, name in [('glossary', 'Terms & concepts'), ('technology_categories', 'Technology categories'), ('related_fields', 'Related fields'), ('organizations', 'Organizations')]:
             out.append('<a class="metric" href="#' + key + '"><strong>' + str(len(d[key])) + '</strong><span>' + name + '</span><small>Total in this review</small></a>')
@@ -222,7 +293,7 @@ class Dashboard:
         for s in d['sources']:
             out.append('<article class="card source" id="' + self.anchors[s['id']] + '"><h3>' + escape(s['id'] + ' · ' + s.get('title', 'Source')) + '</h3>' + self.value(s) + '</article>')
         out += ['<h3>Research coverage</h3>' + self.value(d['organization_coverage']) + '<details><summary>Research log</summary>' + self.value(d['research_log']) + '</details><details><summary>Handoff records</summary>' + self.value(d['handoff']) + '</details>']
-        extra = {k: v for k, v in d.items() if k not in set(REQUIRED) | {'document', 'orientation', 'claim_observation', 'publication_classifications', 'review_mode', 'portfolio'}}
+        extra = {k: v for k, v in d.items() if k not in set(REQUIRED) | {'document', 'orientation', 'claim_observation', 'publication_classifications', 'review_mode', 'portfolio', 'executive_summary'}}
         out += [self.details(extra) if extra else '', '<footer>Prepared for technical review. Topic classification and claim mapping do not establish patentability, enforceable scope, or infringement.</footer></section></main><script id="review-data" type="application/json">' + payload + '</script><script>' + js + '</script></body></html>']
         return ''.join(out)
 

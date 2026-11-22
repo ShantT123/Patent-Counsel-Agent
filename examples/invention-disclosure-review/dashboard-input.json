@@ -476,5 +476,57 @@
       "FICT-APP-B has no reviewed current amended claims or status source.",
       "No real portfolio protection gap can be inferred from this example."
     ]
+  },
+  "executive_summary": {
+    "overview": [
+      {
+        "text": "This fictional invention checks version numbers before accepting a data update, helping keep an older update from replacing newer information. Lantern is the team\u2019s internal name for the checking component.",
+        "evidence": [
+          {
+            "source_id": "S-DEMO",
+            "locator": "Illustrative claims A1 and B1; fictional notes"
+          }
+        ]
+      }
+    ],
+    "technology_fit": [
+      {
+        "text": "The proposed bucket is cache consistency: keeping stored copies of data in agreement. The example separates technologies mapped to illustrative claims from topics mentioned only in descriptive notes. These fictional records establish no legal patent coverage.",
+        "evidence": [
+          {
+            "source_id": "S-DEMO",
+            "locator": "Illustrative claims A1 and B1; descriptive notes"
+          }
+        ]
+      }
+    ],
+    "key_findings": [
+      {
+        "text": "Version comparison is central to the example. A similarly worded term or related organization would need its own evidence; this demonstration includes no verified public organization research.",
+        "evidence": [
+          {
+            "source_id": "S-DEMO",
+            "locator": "Illustrative claim A1; fixture research scope"
+          }
+        ]
+      }
+    ],
+    "uncertainties": [
+      {
+        "text": "No real patent documents or current claim versions were reviewed. The fictional example cannot establish novelty, patentability, enforceable scope, or which companies compete in a real market.",
+        "evidence": [
+          {
+            "source_id": "S-DEMO",
+            "locator": "Fixture scope: manually authored illustration"
+          }
+        ]
+      }
+    ],
+    "next_steps": [
+      {
+        "text": "Recommended: obtain the actual documents and claim versions, confirm the intended technology buckets, and research terminology and organizations before using this structure for a real portfolio decision.",
+        "evidence": []
+      }
+    ]
   }
 }

@@ -27,3 +27,7 @@ Look for bucket lists among supplied sources and relevant authorized portfolio c
 ## Research scope
 
 Record an as-of date and geographic/market scope where known. Separate historic activity from current activity; preserve source dates and qualification when sources conflict. Where capabilities are limited, identify unverified vocabulary and research targets as hypotheses. A document-only run can be useful but cannot pass as a researched organization report.
+
+## Quick-read synthesis
+
+After reconciling the reports, write the source-linked executive summary described in the report contract. Lead with what the invention does, then the strongest technology fit and its uncertainty. Include the few findings that change a reader’s understanding, material unknowns, and prioritized recommended next steps. Use plain English at a smart 12th-grade level. Attach sources to the particular statements they support; keep a company’s product claims labeled as claims. Summary brevity must not erase claim-version limits, description-only mappings, or the distinction between a design goal and demonstrated performance.

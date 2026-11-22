@@ -2,6 +2,10 @@
 
 Date: [actual review date]. Materials and research scope: [coverage and gaps].
 
+## Executive summary
+
+[About 150–250 words for a smart 12th grader: the idea; technology/portfolio fit and confidence reason; key findings; major uncertainties; recommended next steps. Put source links and locators beside factual statements. Preserve claim-versus-description and intended-versus-demonstrated distinctions.]
+
 ## Orientation
 
 [Explain the disclosed mechanism in plain English, what is established, and what remains uncertain.]

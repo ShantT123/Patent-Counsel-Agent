@@ -11,6 +11,18 @@ Required keys: `schema_version` ("1"), `review_id`, `as_of`, `scope`, `sources`,
 - `research_log`: query, purpose, date, tool, inspected source IDs, status, and gaps. Do not include confidential original wording in query logs intended for sharing.
 - Every evidence reference: source ID, locator, short supporting excerpt, and what it supports. Every confidence object: level (high/medium/low/unresolved), rationale, and missing or contrary evidence.
 
+## Executive summary (required for newly authored reports)
+
+Add `executive_summary` with five nonempty arrays: `overview`, `technology_fit`, `key_findings`, `uncertainties`, and `next_steps`. Each array contains objects with `text` (plain text) and `evidence` (an array of `{source_id, locator}` references to the source register). Example:
+
+```json
+{"text": "The disclosed tube routes incoming air through a treatment region; its effectiveness is unknown.", "evidence": [{"source_id": "S-001", "locator": "Description, paragraph 1"}]}
+```
+
+Aim for 150–250 words total, readable by a smart 12th grader. Explain essential jargon. Summarize the idea, main category and confidence with its reason, proposed/existing portfolio mapping, representative findings or research leads, major uncertainties, and one to three prioritized next steps. Use fewer findings rather than a dense list. A confidence label without the reason is insufficient. For patents/portfolios, preserve claim-versus-description distinctions, claim-version limitations, and source-supported status or unknowns. Do not imply efficacy, novelty, leadership, or legal coverage from a topic match. Label recommendations as recommendations; they may have empty evidence arrays. Unknowns and factual findings should cite the material or scope record establishing the limitation. Do not fabricate sources to populate a field.
+
+Each factual statement needs nearby supporting references. Split statements with different evidence into separate items. Full evidence records in the detailed reports retain supporting excerpts and confidence rationales. The renderer accepts older version-1 files without this optional extension, but clearly labels its orientation-only fallback as lacking an authored executive summary; it does not generate or infer a substantive summary.
+
 ## Five reports
 
 ### Glossary (`G-001`…)
@@ -48,7 +60,7 @@ Verify all references resolve, every glossary entry has a thesaurus record, ever
 
 ## HTML presentation (default)
 
-Render the version-1 JSON as `review.html` using `scripts/render_dashboard.py`, following [HTML dashboard guidance](html-dashboard.md). The complete structured records remain in expandable details and the JSON download. Optional `orientation` is a plain-English summary; optional `document` includes title and document metadata; optional `claim_observation` highlights a source-supported issue. These optional fields preserve compatibility with existing disclosure reports.
+Render the version-1 JSON as `review.html` using `scripts/render_dashboard.py`, following [HTML dashboard guidance](html-dashboard.md). The complete structured records remain in expandable details and the JSON download. Use `executive_summary` for the top quick-read section and visible citations for detailed entries and relations. Public citations offer both an internal source-register link and a direct safe HTTP(S) link when recorded. Private/disclosure sources retain locators and internal links without exposing local paths as public links. Optional `orientation` is additional plain-English mechanism context; optional `document` includes title and document metadata; optional `claim_observation` highlights a source-supported issue. These optional fields preserve compatibility with existing disclosure reports.
 
 ## Patent/application and portfolio extension (version-1 optional fields)
 
