@@ -12,6 +12,8 @@ Run that command from the installed skill directory (or use the script's absolut
 
 ## Presentation
 
+- Put the executive summary first, above report counts and mechanism detail. Keep the idea, technology/portfolio fit, key findings, uncertainties, and next steps readable without expanding details or enabling JavaScript. Target a one-minute orientation for a smart 12th grader.
+- Show citations beside summary statements and visible report findings, thesaurus relations, and organization activities. Each citation links to its source-register entry and, when recorded, the inspected public URL. Keep supporting locators visible; do not imply that a source list alone supports every sentence. Do not create external links for private sources or treat a source hyperlink as independent verification.
 - Calm, readable layout with sidebar navigation, overview cards, spacious typography, and responsive report cards.
 - Search across the five reports, filter by technology and qualitative confidence, and filter glossary entries by term type. Counts show total records and current matches; provide reset and no-results states.
 - All five reports remain present. Evidence, contrary evidence, source dates, inventor questions, and limitations remain accessible in expandable full details, with stable internal source links.
@@ -24,4 +26,4 @@ Render all source content as escaped text; accept only safe HTTP(S) source links
 
 ## Check before delivery
 
-Render the actual review, inspect a desktop and narrow-width view when browser tooling is available, and test search, confidence/category/type filters, reset, source navigation, empty results, download, and print expansion. Verify no external requests occur on page load. If visual testing is unavailable, state that limitation and still provide the generated files. Synthetic renderer and interaction checks do not establish the quality of the substantive patent analysis.
+Render the actual review, inspect a desktop and narrow-width view when browser tooling is available, and test search, confidence/category/type filters, reset, source navigation, empty results, download, and print expansion. Verify the summary appears first, its source links resolve, public URLs open explicitly, and private sources retain usable internal citations. Verify no external requests occur on page load. If visual testing is unavailable, state that limitation and still provide the generated files. Synthetic renderer and interaction checks do not establish the quality of the substantive patent analysis.

@@ -100,10 +100,51 @@ class DashboardTests(unittest.TestCase):
         for key in module.ARRAYS:
             self.data[key] = []
         self.data.pop('portfolio')
+        self.data.pop('executive_summary', None)
         output = module.Dashboard(self.data).render()
         self.assertIn('No entries match', output)
         self.assertIn('None recorded', output)
         self.assertNotIn('id="portfolio"', output)
+
+    def test_summary_precedes_metrics_and_retains_qualifications(self):
+        text = module.Dashboard(self.data).render()
+        self.assertLess(text.index('id="executive-summary"'), text.index('id="overview"'))
+        self.assertIn('no legal patent coverage', text)
+        self.assertIn('What remains uncertain', text)
+        self.assertIn('Next steps', text)
+
+    def test_summary_requires_resolved_evidence_and_locators(self):
+        for ref in ({'source_id': 'missing', 'locator': 'p1'}, {'source_id': 'S-DEMO'}):
+            data = copy.deepcopy(self.data)
+            data['executive_summary']['overview'][0]['evidence'] = [ref]
+            with self.assertRaisesRegex(ValueError, 'source ID and locator'):
+                module.Dashboard(data)
+
+    def test_legacy_summary_fallback_is_explicit(self):
+        self.data.pop('executive_summary')
+        text = module.Dashboard(self.data).render()
+        self.assertIn('no authored executive summary', text)
+        self.assertIn(self.data['orientation'], text)
+
+    def test_visible_citations_have_safe_public_links_and_private_locators(self):
+        self.data['sources'][0]['url'] = 'https://example.org/evidence'
+        dashboard = module.Dashboard(self.data)
+        citation = dashboard.citations(self.data['glossary'][0])
+        self.assertIn('href="#' + dashboard.anchors['S-DEMO'] + '"', citation)
+        self.assertIn('href="https://example.org/evidence"', citation)
+        self.assertIn('A1', citation)
+        self.assertIn('Sources cited in this entry', dashboard.card(self.data['glossary'][0], 'glossary'))
+        self.data['sources'][0]['url'] = 'file:///private/disclosure'
+        self.assertNotIn('Open source', module.Dashboard(self.data).citations(self.data['glossary'][0]))
+
+    def test_summary_text_and_source_titles_are_escaped(self):
+        attack = '<img src=x onerror=alert(1)>'
+        self.data['executive_summary']['overview'][0]['text'] = attack
+        self.data['sources'][0]['title'] = attack
+        self.data['sources'][0]['url'] = 'javascript:alert(1)'
+        text = module.Dashboard(self.data).render()
+        self.assertNotIn(attack, text)
+        self.assertNotIn('javascript:alert(1)', Document(text).links)
 
     def test_cli_preserves_input_and_does_not_overwrite_it(self):
         with tempfile.TemporaryDirectory() as folder:
