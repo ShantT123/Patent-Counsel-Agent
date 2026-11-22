@@ -44,3 +44,18 @@ Each entity: ID, name, entity type, and category matches. Each match identifies 
 `handoff`: terminology/mechanism IDs and questions for intake; category-to-bucket mappings for portfolio strategy, each with provenance and proposed/confirmed status. Add revision notes when correcting a prior review.
 
 Verify all references resolve, every glossary entry has a thesaurus record, every category has related-field coverage, and every initial/related category has organization coverage. Completeness is relative to inspected materials; do not claim all possible concepts or competitors have been discovered.
+
+
+## HTML presentation (default)
+
+Render the version-1 JSON as `review.html` using `scripts/render_dashboard.py`, following [HTML dashboard guidance](html-dashboard.md). The complete structured records remain in expandable details and the JSON download. Optional `orientation` is a plain-English summary; optional `document` includes title and document metadata; optional `claim_observation` highlights a source-supported issue. These optional fields preserve compatibility with existing disclosure reports.
+
+## Patent/application and portfolio extension (version-1 optional fields)
+
+Set optional `review_mode` to `disclosure`, `patent`, `application`, or `portfolio`. For patents/applications, `document` records document type, identifiers, jurisdiction, supplied version, relevant dates, and source-backed identity. Include a `portfolio` object for a claim-aware single-document or multi-document map:
+
+- `records` (array): each has unique `document_id`, document type (`issued_patent`, `published_application`, `pending_claim_version`, or `disclosure`), identifiers, title, jurisdiction, family ID/relationship if supported, sourced status/as-of date or unknown, reviewed claim version, claim summaries (independent combinations and dependent additions with source locators), extraction limitations, and source IDs.
+- `category_mappings` (array): document ID, category ID, `basis` (`claim_mapped`, `description_only`, `potential`, `unreviewed`), `claim_locators` (required and nonempty for claim-mapped entries), relevant claim limitations, supporting source references, assessment confidence, review date/version, and scope limitations. Include proposed versus counsel-confirmed assessment status when relevant; never infer confirmation.
+- `gaps` (array): missing documents, missing claim versions, application-only or description-only topic mappings, unknown/stale status, tentative overlap, and unanswered questions. An inventory absence does not establish a legal protection gap.
+
+Document identifiers and source locators must resolve to the supplied record/version. Do not create portfolio mappings from keywords alone. Keep issued and application claims explicit, and family claims separate. Follow [patent/portfolio guidance](patent-portfolio.md). Unknowns stay unknown; no numeric legal-coverage score is generated.

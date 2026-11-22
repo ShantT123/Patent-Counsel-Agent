@@ -1,4 +1,4 @@
 interface:
   display_name: "Invention Disclosure Review"
-  short_description: "Explain terminology, classify technologies, and research related fields"
-  default_prompt: "Use $invention-disclosure-review on these materials. Check for my technology buckets, propose a taxonomy if unavailable, and research public terminology and organizations using generalized queries. Produce the five source-linked reports with confidence and unresolved questions."
+  short_description: "Review inventions and patent portfolios in an HTML dashboard"
+  default_prompt: "Use $invention-disclosure-review on these invention, patent, application, or portfolio materials. Check for my technology buckets, propose a taxonomy if unavailable, and research public terminology and organizations using generalized queries. Produce review.html and review.json with the five source-linked reports, confidence and unresolved questions. For patents and portfolios, distinguish reviewed-claim mappings from description-only topics and preserve document versions."

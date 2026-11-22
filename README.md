@@ -12,13 +12,13 @@ The new **Portfolio Strategy** skill maps technology ownership, products, roadma
 
 ## Try invention disclosure review
 
-The new **Invention Disclosure Review** skill explains technical terminology and unnamed concepts, builds a relationship-labeled thesaurus, categorizes technologies, and researches related fields and relevant organizations. It checks for your existing technology buckets; if unavailable, it asks for the list and proposes a provisional taxonomy for review. Public research uses generalized queries automatically, subject to user restrictions and host capabilities.
+The **Invention Disclosure Review** skill reviews invention disclosures, issued patents, published applications, and entire patent portfolios. It explains terminology and unnamed concepts, builds a relationship-labeled thesaurus, categorizes technologies, and researches related fields and relevant organizations. Its default deliverable is a searchable, self-contained HTML dashboard with JSON, sources, and confidence filters. Patent and portfolio reviews distinguish mappings to reviewed claims from description-only topics and preserve application versus issued claim versions. It checks for your existing technology buckets; if unavailable, it asks for the list and proposes a provisional taxonomy for review. Public research uses generalized queries automatically, subject to user restrictions and host capabilities.
 
-Install the entire `skills/invention-disclosure-review` directory and invoke `$invention-disclosure-review` with your description and documents. The host supplies document-reading and public-research tools; there is no bundled parser or search service. Read the [fictional input](examples/invention-disclosure-review/inputs.md) and [illustrative fallback report](examples/invention-disclosure-review/worked-example.md). The skill's five-report contract and template are self-contained in its `references/` directory. Host installation and independent model performance have not been validated.
+Install the entire `skills/invention-disclosure-review` directory and invoke `$invention-disclosure-review` with your description and documents. The host supplies document-reading and public-research tools; there is no bundled parser or search service. Read the [fictional input](examples/invention-disclosure-review/inputs.md) and [illustrative fallback report](examples/invention-disclosure-review/worked-example.md). The skill's report contract, HTML guidance, and patent/portfolio workflow are self-contained in its `references/` directory. A standard-library renderer and fictional portfolio dashboard are included. Host installation and independent model performance have not been validated.
 
 Example request:
 
-> Use $invention-disclosure-review on these documents. Check for my technology bucket list, propose a taxonomy if unavailable, and research public terminology and organizations using generalized queries. Explain terms and concepts in plain English, distinguish synonyms from substitutes, and produce all five reports with source references, confidence, and inventor questions.
+> Use $invention-disclosure-review on these documents. Check for my technology bucket list, propose a taxonomy if unavailable, and research public terminology and organizations using generalized queries. Explain terms and concepts in plain English, distinguish synonyms from substitutes, and produce review.html and review.json with all five reports, source references, confidence, and review questions. For patents and portfolios, include the claim-aware document-to-technology map.
 
 ## Try portfolio strategy
 
@@ -74,10 +74,10 @@ For Codex, copy the **entire** `skills/invention-intake` folder into your config
 - A reusable skill with evidence and uncertainty rules.
 - Templates for disclosures and filing-review packets.
 - A complete fictional input/output example with a review commentary.
-- Sixteen proposed behavioral challenge cases across the four skills and a human evaluation rubric; recorded model runs remain outstanding.
+- Eighteen proposed behavioral challenge cases across the four skills and a human evaluation rubric; recorded model runs remain outstanding.
 - A configurable filing-review skill and documented JSON input format.
 - A standard-library calculator using decimal arithmetic, with quarterly cost breakouts and explicit scenarios.
-- Thirty-five executable tests covering budgets, scoring, organization/portfolio integrity, import, refresh behavior, and module compatibility.
+- Forty-three executable tests covering renderer safety, evidence preservation, budgets, scoring, organization/portfolio integrity, import, refresh behavior, and module compatibility.
 - A portfolio-strategy skill, JSON/CSV examples, and a source-linked strategy-review template.
 - A standard-library package checker; no API key or paid service is required to inspect the project.
 

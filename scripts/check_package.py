@@ -9,6 +9,14 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = [
     "skills/invention-disclosure-review/SKILL.md",
+    "skills/invention-disclosure-review/references/html-dashboard.md",
+    "skills/invention-disclosure-review/references/patent-portfolio.md",
+    "skills/invention-disclosure-review/scripts/render_dashboard.py",
+    "skills/invention-disclosure-review/scripts/dashboard.css",
+    "skills/invention-disclosure-review/scripts/dashboard.js",
+    "examples/invention-disclosure-review/dashboard-input.json",
+    "examples/invention-disclosure-review/dashboard.html",
+    "tests/test_dashboard.py",
     "skills/invention-disclosure-review/agents/openai.yaml",
     "skills/invention-disclosure-review/references/workflow.md",
     "skills/invention-disclosure-review/references/report-contract.md",
@@ -98,13 +106,25 @@ def check():
         if "$" + name not in (ROOT / "skills" / name / "agents/openai.yaml").read_text():
             errors.append("Missing invocation prompt: " + name)
     disclosure_cases = json.loads((ROOT / "evaluations/disclosure-review-cases.json").read_text())
-    if len(disclosure_cases) != 5 or len({c["id"] for c in disclosure_cases}) != 5:
-        errors.append("Expected five unique disclosure-review behavioral cases")
+    if len(disclosure_cases) != 7 or len({c["id"] for c in disclosure_cases}) != 7:
+        errors.append("Expected seven unique disclosure-review behavioral cases")
     for case in disclosure_cases:
         if not case.get("review_for") or not (case.get("input") or case.get("input_text")):
             errors.append("Incomplete disclosure-review case: " + case["id"])
         if case.get("input") and not (ROOT / case["input"]).is_file():
             errors.append("Missing disclosure-review case input: " + case["id"])
+    import importlib.util
+    renderer_path = ROOT / "skills/invention-disclosure-review/scripts/render_dashboard.py"
+    spec = importlib.util.spec_from_file_location("package_dashboard", renderer_path)
+    renderer = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(renderer)
+    try:
+        dashboard_input = json.loads((ROOT / "examples/invention-disclosure-review/dashboard-input.json").read_text())
+        fresh = renderer.Dashboard(dashboard_input).render()
+        if fresh != (ROOT / "examples/invention-disclosure-review/dashboard.html").read_text():
+            errors.append("Saved dashboard differs from fresh rendering")
+    except (ValueError, KeyError, TypeError) as exc:
+        errors.append("Dashboard example invalid: " + str(exc))
     fixture = (ROOT / "examples/invention-disclosure-review/inputs.md").read_text()
     valid_disclosure_locators = set(re.findall(r"## (S-\d+ §\d+)", fixture))
     worked = (ROOT / "examples/invention-disclosure-review/worked-example.md").read_text()
@@ -156,5 +176,5 @@ if __name__ == "__main__":
         for failure in failures:
             print("FAIL:", failure)
         raise SystemExit(1)
-    print("PASS: package files, local links, sixteen case definitions, metadata shape, example locators, calculation reproducibility, and JSON/CSV equivalence.")
+    print("PASS: package files, local links, eighteen case definitions, metadata shape, example locators, calculation reproducibility, and JSON/CSV equivalence.")
     print("Scope: structural checks only; no model-performance or legal validation.")
