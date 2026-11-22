@@ -1,24 +1,67 @@
 # Patent Counsel Workflows
 
-**Open-source AI workflows for developing invention disclosures and preparing patent filing reviews.**
+**Open-source AI skills for understanding inventions, reviewing patents and applications, and planning patent portfolios.**
 
 Created by **Shant Tchakerian**. Version **0.3.0 — preview**.
 
-The **Invention Intake** skill helps patent counsel turn incomplete inventor materials into a source-linked disclosure, prioritized follow-up questions, technical diagrams, and a filing-review packet. It preserves unresolved questions instead of filling them with invented technical facts.
+**New: Invention Disclosure Review** turns an invention description, patent, published application, or portfolio into a searchable HTML dashboard. Learn unfamiliar terminology, explore related technologies and organizations, and see which technology mappings are supported by the reviewed claims.
 
-The **Filing Review** skill adds configurable business scoring, source-retaining portfolio candidates, and deterministic budget scenarios. The original three skills are self-contained and can be installed separately.
+| Skill | Use it to… |
+| --- | --- |
+| [Invention Disclosure Review](skills/invention-disclosure-review/SKILL.md) | Understand technical terms and concepts, classify patents and applications, and map portfolio technologies in an HTML dashboard |
+| [Invention Intake](skills/invention-intake/SKILL.md) | Develop incomplete inventor materials into a source-linked disclosure, technical questions, and a filing-review packet |
+| [Filing Review](skills/filing-review/SKILL.md) | Apply supplied business criteria and compare deterministic budget scenarios |
+| [Portfolio Strategy](skills/portfolio-strategy/SKILL.md) | Map technology ownership, products, roadmap targets, and portfolio inventory |
 
-The new **Portfolio Strategy** skill maps technology ownership, products, roadmap targets, portfolio records, and disclosure pipeline. Its offline analyzer preserves proposed mappings and source dates, summarizes inventory, and flags strategy-review needs without inferring legal coverage.
+Each skill is self-contained and can be installed separately.
 
 ## Try invention disclosure review
 
-The **Invention Disclosure Review** skill reviews invention disclosures, issued patents, published applications, and entire patent portfolios. It explains terminology and unnamed concepts, builds a relationship-labeled thesaurus, categorizes technologies, and researches related fields and relevant organizations. Its default deliverable is a searchable, self-contained HTML dashboard with JSON, sources, and confidence filters. Patent and portfolio reviews distinguish mappings to reviewed claims from description-only topics and preserve application versus issued claim versions. It checks for your existing technology buckets; if unavailable, it asks for the list and proposes a provisional taxonomy for review. Public research uses generalized queries automatically, subject to user restrictions and host capabilities.
+Built for technical patent counsel learning unfamiliar technologies. Give it an invention description and supporting materials, a single issued patent or published application, or a collection of portfolio documents.
 
-Install the entire `skills/invention-disclosure-review` directory and invoke `$invention-disclosure-review` with your description and documents. The host supplies document-reading and public-research tools; there is no bundled parser or search service. Read the [fictional input](examples/invention-disclosure-review/inputs.md) and [illustrative fallback report](examples/invention-disclosure-review/worked-example.md). The skill's report contract, HTML guidance, and patent/portfolio workflow are self-contained in its `references/` directory. A standard-library renderer and fictional portfolio dashboard are included. Host installation and independent model performance have not been validated.
+### Five connected reports
 
-Example request:
+| Report | What you get |
+| --- | --- |
+| **Glossary** | Plain-English explanations of technical terms, acronyms, internal names, and concepts described without a name, with their role in the invention |
+| **Thesaurus** | Synonyms, broader and narrower concepts, related mechanisms, substitutes, and commonly confused terms, with differences made explicit |
+| **Technology categorization** | Overarching and specific technology areas, alternatives, source-backed confidence assessments, and mappings to existing or proposed portfolio buckets |
+| **Related fields** | Neighboring technologies that share problems, mechanisms, or constraints, with useful research directions |
+| **Competitors, innovators, and organizations** | Relevant companies, research groups, and projects for the initial and related categories, with dated evidence and qualified roles |
 
-> Use $invention-disclosure-review on these documents. Check for my technology bucket list, propose a taxonomy if unavailable, and research public terminology and organizations using generalized queries. Explain terms and concepts in plain English, distinguish synonyms from substitutes, and produce review.html and review.json with all five reports, source references, confidence, and review questions. For patents and portfolios, include the claim-aware document-to-technology map.
+The skill checks for your technology bucket list. If none is available, it asks for the list and continues with a proposed taxonomy for review. Public terminology and organization research runs automatically using generalized queries, subject to your restrictions and available host tools.
+
+### HTML dashboard by default
+
+The default deliverables are **`review.html` and `review.json`**. The dashboard includes sidebar navigation, search, technology/confidence filters, glossary type filters, expandable evidence, source links, JSON download, and print/save-PDF support. The HTML embeds its styles and scripts, so it needs no web server or external assets.
+
+Try the [fictional portfolio dashboard](examples/invention-disclosure-review/dashboard.html): download the HTML using GitHub's **Download raw file** control and open it in your browser. GitHub's file viewer displays the HTML source. The [editable example JSON](examples/invention-disclosure-review/dashboard-input.json) and [example guide](examples/invention-disclosure-review/README.md) explain the fictional records.
+
+### Patents, applications, and portfolio mapping
+
+For each document, the skill identifies the reviewed publication and claim version, summarizes independent claims and dependent additions, and maps technology categories using **claim-mapped**, **description-only**, **potential**, or **unreviewed** labels. Portfolio mode consolidates terminology and taxonomy while preserving document-specific evidence and differences between family-member claims.
+
+Issued claims remain distinct from published or pending application claims. A technology topic or proposed claim mapping does not establish enforceable legal scope, infringement, or freedom to operate. Unknown prosecution status and missing claim versions remain explicit.
+
+### Install and run
+
+Install the **entire** [skills/invention-disclosure-review](skills/invention-disclosure-review) folder, including its `references/` and `scripts/` files, in your assistant's configured skills directory. In Codex, invoke `$invention-disclosure-review`. In another assistant, provide [SKILL.md](skills/invention-disclosure-review/SKILL.md), its referenced files, and your source materials.
+
+For one invention or publication:
+
+> Use $invention-disclosure-review on this invention disclosure, patent, or published application. Explain its terms and concepts, build the thesaurus, categorize its technologies, research related fields and organizations, and produce review.html and review.json with sources and confidence. Check for my technology buckets and propose a taxonomy if unavailable. For a patent or application, include the reviewed-claim technology map.
+
+For a portfolio:
+
+> Use $invention-disclosure-review on these portfolio documents. Produce a consolidated HTML dashboard with shared terminology, technology buckets, and a document-to-technology map. Separate issued and application claims, distinguish claim-mapped topics from description-only topics, and flag missing claim versions and uncertain status.
+
+To render the supplied fictional example without an AI assistant, run from the repository root:
+
+```sh
+python3 skills/invention-disclosure-review/scripts/render_dashboard.py examples/invention-disclosure-review/dashboard-input.json review.html
+```
+
+The renderer requires Python 3.10+ and no third-party libraries or API keys. It presents the supplied JSON; it does not extract patent text, conduct research, or infer claim mappings. Live analysis requires host document-reading and research tools. Keep real matter documents and generated reports outside this public repository. See the [report contract](skills/invention-disclosure-review/references/report-contract.md), [HTML guidance](skills/invention-disclosure-review/references/html-dashboard.md), and [patent/portfolio workflow](skills/invention-disclosure-review/references/patent-portfolio.md). Host installation and independent substantive model performance remain unvalidated.
 
 ## Try portfolio strategy
 
@@ -71,7 +114,8 @@ For Codex, copy the **entire** `skills/invention-intake` folder into your config
 
 ## What you get
 
-- A reusable skill with evidence and uncertainty rules.
+- Four independently usable skills with evidence and uncertainty rules.
+- A five-report invention/patent review skill with an offline HTML dashboard, JSON output, and explicit patent/application/portfolio modes.
 - Templates for disclosures and filing-review packets.
 - A complete fictional input/output example with a review commentary.
 - Eighteen proposed behavioral challenge cases across the four skills and a human evaluation rubric; recorded model runs remain outstanding.
@@ -83,7 +127,7 @@ For Codex, copy the **entire** `skills/invention-intake` folder into your config
 
 ## Scope
 
-This release supports **portfolio strategy, pre-filing invention development, and counsel review**. The intake skill can use optional strategy and glossary context. The filing-review skill applies supplied company criteria and assumptions; its calculator requires explicit policy, budget, and scenario inputs. Missing ratings remain unknown, and missing corporate evidence limits the corresponding review.
+This release supports **invention disclosure review, patent and application technology review, portfolio mapping and strategy, pre-filing invention development, and counsel review**. The intake skill can use optional strategy and glossary context. The filing-review skill applies supplied company criteria and assumptions; its calculator requires explicit policy, budget, and scenario inputs. Missing ratings remain unknown, and missing corporate evidence limits the corresponding review.
 
 It does not conduct an exhaustive prior-art search, determine inventorship, give a legal clearance opinion, manage deadlines, draft a complete patent application, or file anything. It does not supply a confidentiality or privilege guarantee. Outputs need review by appropriately qualified counsel before professional reliance.
 
@@ -101,7 +145,8 @@ It does not conduct an exhaustive prior-art search, determine inventorship, give
 
 | Path | Purpose |
 | --- | --- |
-| `skills/invention-disclosure-review/` | Five-report terminology and technology review skill with public research guidance |
+| `skills/invention-disclosure-review/` | Five-report invention, patent, application, and portfolio review skill with HTML renderer and claim-aware mapping guidance |
+| `examples/invention-disclosure-review/` | Fictional sources, worked report, editable portfolio JSON, and self-contained HTML dashboard |
 | `skills/invention-intake/` | Installable intake skill, supporting references, and Codex UI metadata |
 | `skills/filing-review/` | Installable filing-review skill, guidance, and standalone calculator |
 | `skills/portfolio-strategy/` | Installable strategy skill, organization/portfolio analyzer, CSV import, and handoff context |
@@ -109,7 +154,7 @@ It does not conduct an exhaustive prior-art search, determine inventorship, give
 | `examples/synthetic-invention/` | Fictional source materials, worked output, and reviewer commentary |
 | `examples/filing-review/` | Editable fictional JSON, source notes, actual calculator output, and review packet |
 | `examples/portfolio-strategy/` | Equivalent JSON/CSV examples, generated output, sources, and strategy review |
-| `tests/` | Executable calculator, inventory, import, and handoff tests |
+| `tests/` | Executable renderer, calculator, inventory, import, and handoff tests |
 | `evaluations/` | Challenge cases, scoring rubric, and evaluation status |
 | `scripts/check_package.py` | Checks package integrity and worked-example source references |
 
