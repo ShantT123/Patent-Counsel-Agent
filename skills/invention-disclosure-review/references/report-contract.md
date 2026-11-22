@@ -1,0 +1,46 @@
+# Report contract (version 1)
+
+Use the same IDs across readable reports and JSON. Null means unknown; an empty array means none recorded, with a coverage explanation where relevant. Never put a fabricated source or value into a required field. This is an interchange contract, not input for existing portfolio calculators.
+
+## JSON envelope
+
+Required keys: `schema_version` ("1"), `review_id`, `as_of`, `scope`, `sources`, `research_log`, `glossary`, `thesaurus`, `technology_categories`, `taxonomy`, `related_fields`, `organizations`, `organization_coverage`, `questions`, `limitations`, `handoff`.
+
+- `scope`: supplied materials, inspected materials, exclusions, extraction limits, research status, geography, and time scope.
+- `sources`: ID, title, kind (disclosure/public), locator or URL, publication/update date if available, actual accessed date for inspected public sources, and inspection status.
+- `research_log`: query, purpose, date, tool, inspected source IDs, status, and gaps. Do not include confidential original wording in query logs intended for sharing.
+- Every evidence reference: source ID, locator, short supporting excerpt, and what it supports. Every confidence object: level (high/medium/low/unresolved), rationale, and missing or contrary evidence.
+
+## Five reports
+
+### Glossary (`G-001`…)
+
+Each entry: ID, original wording, occurrences/evidence, sense, type (term_of_art/internal_name/acronym/unnamed_concept/uncertain), provisional descriptive label if needed, plain-English definition, role in this invention, example/analogy and limits where useful, evidence status (disclosed/externally_supported/inferred/unknown), meaning confidence, and inventor question if unresolved. Include a public citation for a verified term-of-art designation. Do not conflate general definition with the invention-specific meaning.
+
+### Thesaurus
+
+One record per glossary ID, including entries where no supported match was found. Each relation: target wording or glossary ID, relation type (exact_alias/broader/narrower/related_mechanism/functional_substitute/cross_field/confused_with), explanation of similarities AND material differences, applicable context, evidence, confidence, suggested generalized search phrase. Identify unverified search candidates as such. Label an empty relations list with the reason.
+
+### Technology categories (`T-001`…)
+
+Each: ID, name, role (overarching/primary_mechanism/application/supporting/alternative), parent IDs, description, glossary IDs, supporting evidence, fit confidence, contrary evidence, alternative category IDs, and missing facts. Explicitly state whether an overarching field is justified. Do not force all mechanisms under a broad label such as AI. Candidate CPC/IPC fields: scheme, code, official definition URL, version/date where available, verification status, and mapping rationale; omit unsupported codes.
+
+`taxonomy`: status (existing/proposed/awaiting_list), source/version, buckets (ID, name, definition, parent ID), mappings (category ID, bucket ID, proposed/confirmed, evidence, confidence), gaps, and review questions. Distinguish technical category confidence from mapping confidence.
+
+### Related fields (`R-001`…)
+
+Each: ID, parent category ID, name, relationship type (shared_problem/shared_mechanism/shared_constraint/substitute/transferable_technique), explanation, source and glossary links, differences, relationship confidence, search usefulness with reason, generalized search phrases. Every category must have related fields or an explicit no-supported-fields coverage note. Do not recursively expand without a bound; default one hop from initial categories.
+
+### Organizations (`O-001`…)
+
+Each entity: ID, name, entity type, and category matches. Each match identifies T- or R-ID, role (commercial_competitor/research_innovator/patent_active/open_source/standards/evidenced_leader/technology_relevant), concrete activity, dated supporting sources, relevance confidence, and limitations. Representative products, papers, projects, and patent publications must have inspected supporting references. Leadership claims need a stated criterion and comparative evidence. Label market overlap unknown when client context is missing.
+
+`organization_coverage`: one record for every T- and R-ID, researched status, matched organization IDs, query references, and remaining gaps, including zero-result categories. Weak/alternative categories retain that qualification in the organization report.
+
+## Closing records
+
+`questions`: prioritized question, affected IDs, missing fact, and why an answer matters.
+`limitations`: unresolved interpretations, missing extraction/research, conflicts, and scope limits.
+`handoff`: terminology/mechanism IDs and questions for intake; category-to-bucket mappings for portfolio strategy, each with provenance and proposed/confirmed status. Add revision notes when correcting a prior review.
+
+Verify all references resolve, every glossary entry has a thesaurus record, every category has related-field coverage, and every initial/related category has organization coverage. Completeness is relative to inspected materials; do not claim all possible concepts or competitors have been discovered.

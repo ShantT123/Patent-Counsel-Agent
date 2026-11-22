@@ -28,3 +28,7 @@ The offline package checker passed during preparation, including source-locator 
 - `examples/portfolio-strategy/expected-output.json` is generated analyzer output. The accompanying strategy review is manually authored. The fictional counsel assessments are illustrative input records, not independent legal validation.
 - Three proposed strategy behavioral cases bring the total to eleven. No recorded model evaluation run or independent attorney validation is claimed.
 - The expanded package checker checks equivalent JSON/CSV reports and source-locator existence in the strategy example; source existence does not prove that the source supports an assertion.
+
+## Invention disclosure review
+
+Five proposed challenge cases are in `disclosure-review-cases.json`. The Lantern worked example is manually authored and document-only; it does not demonstrate live public research. Independent model runs, attorney scoring, extraction recall, confidence calibration, research coverage, and cross-host installation remain unmeasured. Package checks validate required files, case structure, metadata, links, and example source locators only.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Invention Disclosure Review"
+  short_description: "Explain terminology, classify technologies, and research related fields"
+  default_prompt: "Use $invention-disclosure-review on these materials. Check for my technology buckets, propose a taxonomy if unavailable, and research public terminology and organizations using generalized queries. Produce the five source-linked reports with confidence and unresolved questions."

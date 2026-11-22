@@ -11,3 +11,9 @@ Added a self-contained filing-review skill, configurable business criteria, expl
 ## 0.1.0 — 2026-11-02 (preview)
 
 Initial intake skill, disclosure templates, fictional worked example, five behavioral challenge cases, and package checks.
+
+## Unreleased — invention disclosure review
+
+- Add a self-contained five-report skill for terminology, thesaurus relationships, technology categories, related fields, and organizations.
+- Check existing technology buckets and propose a taxonomy when unavailable; use generalized public research by default.
+- Add report contract/template, fictional fallback example, and five proposed behavioral challenges. Independent behavioral evaluation remains outstanding.
