@@ -8,6 +8,15 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = [
+    "skills/invention-disclosure-review/SKILL.md",
+    "skills/invention-disclosure-review/agents/openai.yaml",
+    "skills/invention-disclosure-review/references/workflow.md",
+    "skills/invention-disclosure-review/references/report-contract.md",
+    "skills/invention-disclosure-review/references/report-template.md",
+    "examples/invention-disclosure-review/README.md",
+    "examples/invention-disclosure-review/inputs.md",
+    "examples/invention-disclosure-review/worked-example.md",
+    "evaluations/disclosure-review-cases.json",
     "skills/portfolio-strategy/SKILL.md", "skills/portfolio-strategy/agents/openai.yaml",
     "skills/portfolio-strategy/references/workflow.md", "skills/portfolio-strategy/references/input-format.md",
     "skills/portfolio-strategy/scripts/strategy.py", "tests/test_strategy.py",
@@ -79,7 +88,7 @@ def check():
             errors.append(f"Missing case input for {case['id']}")
         if not (case.get("input") or case.get("input_text")):
             errors.append(f"No input for {case['id']}")
-    for name in ("invention-intake", "filing-review", "portfolio-strategy"):
+    for name in ("invention-intake", "filing-review", "portfolio-strategy", "invention-disclosure-review"):
         body = (ROOT / "skills" / name / "SKILL.md").read_text()
         lines = body.splitlines()
         if (len(lines) < 5 or lines[0] != "---" or lines[1] != "name: " + name
@@ -88,6 +97,20 @@ def check():
             errors.append("Unexpected skill frontmatter shape or unfinished scaffold: " + name)
         if "$" + name not in (ROOT / "skills" / name / "agents/openai.yaml").read_text():
             errors.append("Missing invocation prompt: " + name)
+    disclosure_cases = json.loads((ROOT / "evaluations/disclosure-review-cases.json").read_text())
+    if len(disclosure_cases) != 5 or len({c["id"] for c in disclosure_cases}) != 5:
+        errors.append("Expected five unique disclosure-review behavioral cases")
+    for case in disclosure_cases:
+        if not case.get("review_for") or not (case.get("input") or case.get("input_text")):
+            errors.append("Incomplete disclosure-review case: " + case["id"])
+        if case.get("input") and not (ROOT / case["input"]).is_file():
+            errors.append("Missing disclosure-review case input: " + case["id"])
+    fixture = (ROOT / "examples/invention-disclosure-review/inputs.md").read_text()
+    valid_disclosure_locators = set(re.findall(r"## (S-\d+ §\d+)", fixture))
+    worked = (ROOT / "examples/invention-disclosure-review/worked-example.md").read_text()
+    for locator in re.findall(r"S-\d+ §\d+", worked):
+        if locator not in valid_disclosure_locators:
+            errors.append("Unknown disclosure-review example locator: " + locator)
     filing_cases = json.loads((ROOT / "evaluations/filing-review-cases.json").read_text())
     if len(filing_cases) != 3 or len({c["id"] for c in filing_cases}) != 3:
         errors.append("Expected three unique filing-review behavioral cases")
@@ -133,5 +156,5 @@ if __name__ == "__main__":
         for failure in failures:
             print("FAIL:", failure)
         raise SystemExit(1)
-    print("PASS: package files, local links, eleven case definitions, metadata shape, example locators, calculation reproducibility, and JSON/CSV equivalence.")
+    print("PASS: package files, local links, sixteen case definitions, metadata shape, example locators, calculation reproducibility, and JSON/CSV equivalence.")
     print("Scope: structural checks only; no model-performance or legal validation.")

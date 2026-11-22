@@ -6,9 +6,19 @@ Created by **Shant Tchakerian**. Version **0.3.0 — preview**.
 
 The **Invention Intake** skill helps patent counsel turn incomplete inventor materials into a source-linked disclosure, prioritized follow-up questions, technical diagrams, and a filing-review packet. It preserves unresolved questions instead of filling them with invented technical facts.
 
-The **Filing Review** skill adds configurable business scoring, source-retaining portfolio candidates, and deterministic budget scenarios. All three skills are self-contained and can be installed separately.
+The **Filing Review** skill adds configurable business scoring, source-retaining portfolio candidates, and deterministic budget scenarios. The original three skills are self-contained and can be installed separately.
 
 The new **Portfolio Strategy** skill maps technology ownership, products, roadmap targets, portfolio records, and disclosure pipeline. Its offline analyzer preserves proposed mappings and source dates, summarizes inventory, and flags strategy-review needs without inferring legal coverage.
+
+## Try invention disclosure review
+
+The new **Invention Disclosure Review** skill explains technical terminology and unnamed concepts, builds a relationship-labeled thesaurus, categorizes technologies, and researches related fields and relevant organizations. It checks for your existing technology buckets; if unavailable, it asks for the list and proposes a provisional taxonomy for review. Public research uses generalized queries automatically, subject to user restrictions and host capabilities.
+
+Install the entire `skills/invention-disclosure-review` directory and invoke `$invention-disclosure-review` with your description and documents. The host supplies document-reading and public-research tools; there is no bundled parser or search service. Read the [fictional input](examples/invention-disclosure-review/inputs.md) and [illustrative fallback report](examples/invention-disclosure-review/worked-example.md). The skill's five-report contract and template are self-contained in its `references/` directory. Host installation and independent model performance have not been validated.
+
+Example request:
+
+> Use $invention-disclosure-review on these documents. Check for my technology bucket list, propose a taxonomy if unavailable, and research public terminology and organizations using generalized queries. Explain terms and concepts in plain English, distinguish synonyms from substitutes, and produce all five reports with source references, confidence, and inventor questions.
 
 ## Try portfolio strategy
 
@@ -64,7 +74,7 @@ For Codex, copy the **entire** `skills/invention-intake` folder into your config
 - A reusable skill with evidence and uncertainty rules.
 - Templates for disclosures and filing-review packets.
 - A complete fictional input/output example with a review commentary.
-- Eleven proposed behavioral challenge cases across the three skills and a human evaluation rubric; recorded model runs remain outstanding.
+- Sixteen proposed behavioral challenge cases across the four skills and a human evaluation rubric; recorded model runs remain outstanding.
 - A configurable filing-review skill and documented JSON input format.
 - A standard-library calculator using decimal arithmetic, with quarterly cost breakouts and explicit scenarios.
 - Thirty-five executable tests covering budgets, scoring, organization/portfolio integrity, import, refresh behavior, and module compatibility.
@@ -91,6 +101,7 @@ It does not conduct an exhaustive prior-art search, determine inventorship, give
 
 | Path | Purpose |
 | --- | --- |
+| `skills/invention-disclosure-review/` | Five-report terminology and technology review skill with public research guidance |
 | `skills/invention-intake/` | Installable intake skill, supporting references, and Codex UI metadata |
 | `skills/filing-review/` | Installable filing-review skill, guidance, and standalone calculator |
 | `skills/portfolio-strategy/` | Installable strategy skill, organization/portfolio analyzer, CSV import, and handoff context |
