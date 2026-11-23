@@ -14,6 +14,11 @@ function filterReports() {
       entry.hidden = !match;
       if (match) count++;
     }
+    for (const group of section.querySelectorAll('.field-group')) {
+      const children = [...group.querySelectorAll('.entry')];
+      group.hidden = children.length ? children.every(entry => entry.hidden)
+        : Boolean(search || confidence || (category && group.dataset.category.toLowerCase() !== category));
+    }
     section.querySelector('.count').textContent = `${count} of ${entries.length} entries`;
     section.querySelector('.empty').hidden = count !== 0;
   }
@@ -24,6 +29,11 @@ document.getElementById('reset').addEventListener('click', () => {
   controls.forEach(control => { control.value = ''; });
   filterReports();
 });
+// Cloud navigation works even when the same anchor was already selected before filtering.
+document.querySelectorAll('.cloud-words a').forEach(link => link.addEventListener('click', () => {
+  controls.forEach(control => { control.value = ''; });
+  filterReports();
+}));
 // Reveal a linked source or finding even when filters hide it.
 function revealAnchor() {
   let id;

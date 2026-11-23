@@ -135,6 +135,24 @@
               "supports": "Illustrative update-ordering mechanism"
             }
           ]
+        },
+        {
+          "target_wording": "sequence number",
+          "relation_type": "cross_field",
+          "similarities_and_differences": "Sequence numbers order items or events; a generation number here orders versions of data. The words are not interchangeable in every system.",
+          "confidence": {
+            "level": "medium",
+            "rationale": "Proposed comparison.",
+            "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+          },
+          "evidence": [
+            {
+              "source_id": "S-DEMO",
+              "locator": "A1",
+              "excerpt": "reject a lower generation update",
+              "supports": "Illustrative update-ordering mechanism"
+            }
+          ]
         }
       ]
     },
@@ -328,6 +346,25 @@
       "source_ids": [
         "S-DEMO"
       ]
+    },
+    {
+      "id": "R-003",
+      "parent_category_id": "T-001",
+      "name": "Distributed databases",
+      "relationship_type": "shared_problem",
+      "explanation": "Both the cache-update example and distributed database systems must decide whether incoming data is newer than stored data.",
+      "differences": "Message delivery and durable database storage have different guarantees.",
+      "relationship_confidence": {
+        "level": "medium",
+        "rationale": "Related constraint, not an equivalent implementation.",
+        "missing_or_contrary_evidence": "Fictional example; not an assessment of a real patent."
+      },
+      "generalized_search_phrases": [
+        "distributed update ordering"
+      ],
+      "source_ids": [
+        "S-DEMO"
+      ]
     }
   ],
   "organizations": [],
@@ -352,6 +389,12 @@
     },
     {
       "category_id": "R-002",
+      "research_status": "unavailable",
+      "matched_organization_ids": [],
+      "remaining_gaps": "No organizations verified in this fixture."
+    },
+    {
+      "category_id": "R-003",
       "research_status": "unavailable",
       "matched_organization_ids": [],
       "remaining_gaps": "No organizations verified in this fixture."

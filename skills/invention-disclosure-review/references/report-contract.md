@@ -29,9 +29,11 @@ Each factual statement needs nearby supporting references. Split statements with
 
 Each entry: ID, original wording, occurrences/evidence, sense, type (term_of_art/internal_name/acronym/unnamed_concept/uncertain), provisional descriptive label if needed, plain-English definition, role in this invention, example/analogy and limits where useful, evidence status (disclosed/externally_supported/inferred/unknown), meaning confidence, and inventor question if unresolved. Include a public citation for a verified term-of-art designation. Do not conflate general definition with the invention-specific meaning.
 
+Optional glossary frequency metadata: `occurrence_count` is a positive integer counting actual appearances in inspected disclosure/patent material, excluding the generated review, research pages, and duplicate copies. If supplied, include `occurrence_count_basis` with `scope` (the exact set/version of reviewed materials; identical across comparable counts), `method` (how occurrences and aliases were counted), and `evidence` (nonempty source-ID/locator references). Do not infer counts from the number of citations or relationships. Omit counts when extraction or ambiguity prevents reliable counting. The renderer uses frequency sizes only when all entries have documented counts for the same scope; otherwise the glossary cloud uses equal weights. Complete glossary phrases, IDs, definitions, and confidence remain unchanged.
+
 ### Thesaurus
 
-One record per glossary ID, including entries where no supported match was found. Each relation: target wording or glossary ID, relation type (exact_alias/broader/narrower/related_mechanism/functional_substitute/cross_field/confused_with), explanation of similarities AND material differences, applicable context, evidence, confidence, suggested generalized search phrase. Identify unverified search candidates as such. Label an empty relations list with the reason.
+Render each as “Term: [original glossary wording]” and “Related terms:”, with a separate item for each target, not just an ID or a generic heading. One record per glossary ID, including entries where no supported match was found. Each relation: target wording or glossary ID, relation type (exact_alias/broader/narrower/related_mechanism/functional_substitute/cross_field/confused_with), explanation of similarities AND material differences, applicable context, evidence, confidence, suggested generalized search phrase. Identify unverified search candidates as such. Label an empty relations list with the reason.
 
 ### Technology categories (`T-001`…)
 
@@ -41,7 +43,7 @@ Each: ID, name, role (overarching/primary_mechanism/application/supporting/alter
 
 ### Related fields (`R-001`…)
 
-Each: ID, parent category ID, name, relationship type (shared_problem/shared_mechanism/shared_constraint/substitute/transferable_technique), explanation, source and glossary links, differences, relationship confidence, search usefulness with reason, generalized search phrases. Every category must have related fields or an explicit no-supported-fields coverage note. Do not recursively expand without a bound; default one hop from initial categories.
+Present records grouped by the parent invention category name: “Technology: …” and “Related technologies: …”. Explain “How related” and “Important differences” for every related item; do not imply equivalence from a shared constraint. Keep one record per relationship so one invention category can have many related fields and one related field can connect to multiple categories through distinct records. Each: ID, parent category ID, name, relationship type (shared_problem/shared_mechanism/shared_constraint/substitute/transferable_technique), explanation, source and glossary links, differences, relationship confidence, search usefulness with reason, generalized search phrases. Every category must have related fields or an explicit no-supported-fields coverage note. Do not recursively expand without a bound; default one hop from initial categories.
 
 ### Organizations (`O-001`…)
 

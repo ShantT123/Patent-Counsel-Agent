@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import html
 import json
+import math
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -54,6 +55,17 @@ def validate(data):
         ids = [x.get('id') if isinstance(x, dict) else None for x in data[key]]
         if not all(isinstance(x, str) and x for x in ids) or len(set(ids)) != len(ids):
             raise ValueError(key + ' requires nonempty, unique string IDs')
+    for entry in data['glossary']:
+        if 'occurrence_count' in entry:
+            count = entry['occurrence_count']
+            if isinstance(count, bool) or not isinstance(count, int) or count < 1:
+                raise ValueError('occurrence_count must be a positive integer')
+            basis = entry.get('occurrence_count_basis')
+            if not isinstance(basis, dict) or not isinstance(basis.get('scope'), str) or not basis['scope'].strip() or not isinstance(basis.get('method'), str) or not basis['method'].strip() or not isinstance(basis.get('evidence'), list) or not basis['evidence']:
+                raise ValueError('occurrence_count requires scope, method, and evidence in occurrence_count_basis')
+            for ref in basis['evidence']:
+                if not isinstance(ref, dict) or ref.get('source_id') not in {x['id'] for x in data['sources']} or not ref.get('locator'):
+                    raise ValueError('Occurrence-count evidence requires a known source ID and locator')
     if 'executive_summary' in data:
         summary = data['executive_summary']
         if not isinstance(summary, dict):
@@ -188,9 +200,27 @@ class Dashboard:
         gid = record.get('glossary_id', record.get('id'))
         return [c['id'] for c in self.data['technology_categories'] if gid in c.get('glossary_ids', [])]
 
+    def word_cloud(self):
+        entries = self.data['glossary']
+        weighted = bool(entries) and all('occurrence_count' in g for g in entries) and len({g['occurrence_count_basis']['scope'] for g in entries}) == 1
+        maximum = max((g.get('occurrence_count', 1) for g in entries), default=1)
+        note = ('Size shows recorded occurrences in the reviewed materials; counting scope and method are in each entry’s details.' if weighted else 'All terms have equal weight because complete source-occurrence counts are unavailable.')
+        result = '<div id="glossary-cloud" class="card glossary-cloud"><h3>Glossary word cloud</h3><p class="muted">' + note + ' Size does not indicate novelty, importance, confidence, or claim coverage. Select a term to read its definition. The cloud always shows the full glossary; filters apply to the cards below.</p><ul class="cloud-words" aria-label="Glossary terms">'
+        for g in entries:
+            name = g.get('original_wording', g.get('provisional_descriptive_label', g['id']))
+            size = round(16 + 16 * math.log1p(g['occurrence_count']) / math.log1p(maximum), 1) if weighted else 20
+            count = ' · ' + str(g['occurrence_count']) + ' recorded occurrences' if weighted else ''
+            result += '<li><a href="#' + self.anchors[g['id']] + '" style="font-size:' + str(size) + 'px" title="' + escape(g['id'] + count) + '">' + escape(name) + '</a></li>'
+        return result + '</ul>' + ('<p>No glossary terms recorded.</p>' if not entries else '') + '</div>'
+
     def card(self, record, collection):
         rid = record.get('id', record.get('glossary_id', ''))
         title = record.get('original_wording', record.get('name', rid))
+        if collection == 'thesaurus':
+            g = next((g for g in self.data['glossary'] if g['id'] == rid), {})
+            title = 'Term: ' + g.get('original_wording', rid)
+        elif collection == 'related_fields':
+            title = 'Related technology: ' + title
         levels = []
         def collect(value):
             if isinstance(value, dict):
@@ -218,20 +248,25 @@ class Dashboard:
             levels = ['unresolved']
         anchor = self.anchors.get(rid) if collection != 'thesaurus' else None
         attr = (' id="' + anchor + '"') if anchor else ''
-        text = json.dumps(record, ensure_ascii=False).lower()
+        parent_name = next((c['name'] for c in self.data['technology_categories'] if c['id'] == record.get('parent_category_id')), '')
+        text = (json.dumps(record, ensure_ascii=False) + ' ' + title + ' ' + parent_name).lower()
         result = '<article class="entry card"' + attr + ' data-search="' + escape(text) + '" data-levels="' + escape(' '.join(set(levels))) + '" data-categories="' + escape(' '.join(str(c) for c in self.cats(record, collection) if c)) + '" data-type="' + escape(record.get('type', '')) + '">'
         result += '<div class="card-top"><span class="eyebrow">' + escape(rid) + '</span>' + ''.join(self.confidence(x) for x in sorted(set(levels))) + '</div><h3>' + escape(title) + '</h3>'
         if collection == 'glossary':
             result += '<span class="pill">' + escape(label(record.get('type', 'uncertain'))) + '</span><p>' + escape(record.get('plain_english_definition', 'Definition not supplied.')) + '</p><p class="muted">' + escape(record.get('role_in_invention', '')) + '</p>'
         elif collection == 'thesaurus':
-            g = next((g for g in self.data['glossary'] if g['id'] == rid), {})
-            result += '<p class="muted">' + escape(g.get('original_wording', '')) + '</p>'
+            result += '<p class="relationship-label">Related terms:</p>'
+            if not record.get('relations'):
+                result += '<p>' + escape(record.get('no_match_reason', record.get('coverage_note', 'No supported related terms recorded. See full details for research limits.'))) + '</p>'
             for relation in record.get('relations', []):
-                result += '<div class="relation"><span class="pill">' + escape(label(relation.get('relation_type', 'related'))) + '</span><h4>' + escape(relation.get('target_wording', relation.get('target_glossary_id', 'Related concept'))) + '</h4><p>' + escape(relation.get('similarities_and_differences', relation.get('explanation', 'See full details.'))) + '</p>' + self.citations(relation) + '</div>'
+                target = next((g for g in self.data['glossary'] if g['id'] == relation.get('target_glossary_id')), {})
+                name = relation.get('target_wording', target.get('original_wording', relation.get('target_glossary_id', 'Unspecified related term')))
+                result += '<div class="relation"><p class="related-name">' + escape(name) + '</p><p><span class="relationship-label">Relationship:</span> ' + escape(label(relation.get('relation_type', 'related'))) + '</p><p><span class="relationship-label">How related / important differences:</span> ' + escape(relation.get('similarities_and_differences', relation.get('explanation', 'Not supplied; see full details.'))) + '</p>' + self.citations(relation) + '</div>'
         elif collection == 'technology_categories':
             result += '<span class="pill">' + escape(label(record.get('role', 'unspecified'))) + '</span><p>' + escape(record.get('description', '')) + '</p>'
         elif collection == 'related_fields':
-            result += '<p class="muted">Connected to ' + self.value(record.get('parent_category_id')) + '</p><p>' + escape(record.get('explanation', '')) + '</p><p><b>Difference:</b> ' + escape(record.get('differences', 'Not supplied')) + '</p>'
+            parent = next((c for c in self.data['technology_categories'] if c['id'] == record.get('parent_category_id')), {})
+            result += '<p class="muted">Technology: ' + escape(parent.get('name', record.get('parent_category_id', 'Unknown'))) + ' · ' + self.value(record.get('parent_category_id')) + '</p><p><span class="relationship-label">Relationship:</span> ' + escape(label(record.get('relationship_type', 'unspecified'))) + '</p><p><span class="relationship-label">How related:</span> ' + escape(record.get('explanation', 'Not supplied')) + '</p><p><span class="relationship-label">Important differences:</span> ' + escape(record.get('differences', 'Not supplied')) + '</p>'
         else:
             result += '<p class="muted">' + escape(record.get('entity_type', 'Organization')) + '</p>'
             for match in record.get('category_matches', []):
@@ -243,7 +278,20 @@ class Dashboard:
     def section(self, key, title, subtitle):
         records = self.data[key]
         body = ''.join(self.card(record, key) for record in records)
-        return '<section id="' + key + '" class="collection"><div class="section-heading"><div><span class="eyebrow">Review report</span><h2>' + title + '</h2><p class="muted">' + subtitle + '</p></div><span class="count" aria-live="polite">' + str(len(records)) + ' entries</span></div><p class="empty" hidden>No entries match the current filters.</p><div class="cards">' + body + '</div></section>'
+        if key == 'related_fields':
+            groups = []
+            parents = [(c['id'], c['name'], c.get('role', 'unspecified')) for c in self.data['technology_categories']]
+            # Preserve legacy orphan records rather than silently dropping them.
+            parents += [(cid, str(cid) + ' (unresolved category)', 'unresolved') for cid in dict.fromkeys(x.get('parent_category_id') for x in records) if cid not in {c['id'] for c in self.data['technology_categories']}]
+            for cid, name, role in parents:
+                matches = [x for x in records if x.get('parent_category_id') == cid]
+                groups.append('<div class="field-group" data-category="' + escape(cid) + '"><h3>Technology: ' + escape(name) + '</h3><p class="muted">Category role: ' + escape(label(role)) + '</p><p class="relationship-label">Related technologies:</p><div class="cards">' + ''.join(self.card(x, key) for x in matches) + '</div>' + ('<p>No supported related technologies recorded. See research coverage and limitations.</p>' if not matches else '') + '</div>')
+            body = ''.join(groups)
+        else:
+            body = '<div class="cards">' + body + '</div>'
+        if key == 'glossary':
+            body = self.word_cloud() + body
+        return '<section id="' + key + '" class="collection"><div class="section-heading"><div><span class="eyebrow">Review report</span><h2>' + title + '</h2><p class="muted">' + subtitle + '</p></div><span class="count" aria-live="polite">' + str(len(records)) + ' entries</span></div><p class="empty" hidden>No entries match the current filters.</p>' + body + '</section>'
 
     def portfolio(self):
         portfolio = self.data.get('portfolio')
