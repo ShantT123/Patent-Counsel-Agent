@@ -15,9 +15,11 @@ Date: [actual review date]. Materials and research scope: [coverage and gaps].
 | ID / wording / type | Plain-English meaning | Role and example | Evidence | Meaning confidence / question |
 | --- | --- | --- | --- | --- |
 
+[For HTML, include a clickable word cloud with a clear equal-weight or recorded-occurrence-size legend.]
+
 ## 2. Thesaurus
 
-| Glossary ID | Alternative term/concept | Relationship | Similarities and differences | Evidence / confidence | Generalized search phrase |
+| Term (invention wording and ID) | Related term | Relationship | Similarities and differences | Evidence / confidence | Generalized search phrase |
 | --- | --- | --- | --- | --- | --- |
 
 ## 3. Technology categorization and portfolio mapping
@@ -34,7 +36,7 @@ Bucket-list status and source/version: [existing, awaiting list, or proposed for
 
 ## 4. Related fields
 
-| Related-field ID / parent category | Field / relationship | Research bridge and differences | Evidence / relationship confidence | Search usefulness / phrase |
+| Technology (invention category name and ID) | Related technology / relationship | Research bridge and differences | Evidence / relationship confidence | Search usefulness / phrase |
 | --- | --- | --- | --- | --- |
 
 [Record categories with no supported related fields.]

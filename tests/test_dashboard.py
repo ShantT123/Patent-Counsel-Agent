@@ -146,6 +146,62 @@ class DashboardTests(unittest.TestCase):
         self.assertNotIn(attack, text)
         self.assertNotIn('javascript:alert(1)', Document(text).links)
 
+    def test_word_cloud_links_every_phrase_and_defaults_to_equal_weights(self):
+        cloud = module.Dashboard(self.data).word_cloud()
+        self.assertEqual(cloud.count('<li>'), len(self.data['glossary']))
+        self.assertIn('All terms have equal weight', cloud)
+        self.assertIn('Generation number</a>', cloud)
+        self.assertEqual(cloud.count('font-size:20px'), len(self.data['glossary']))
+
+    def test_frequency_cloud_requires_documented_comparable_counts(self):
+        for n, g in enumerate(self.data['glossary']):
+            g['occurrence_count'] = n + 1
+            g['occurrence_count_basis'] = {'scope': 'Fictional A1', 'method': 'Manual', 'evidence': [{'source_id': 'S-DEMO', 'locator': 'A1'}]}
+        cloud = module.Dashboard(self.data).word_cloud()
+        self.assertIn('Size shows recorded occurrences', cloud)
+        self.assertNotIn('font-size:20px', cloud)
+        self.data['glossary'][0]['occurrence_count_basis']['scope'] = 'Different material'
+        self.assertIn('All terms have equal weight', module.Dashboard(self.data).word_cloud())
+        self.data['glossary'][0]['occurrence_count'] = 0
+        with self.assertRaisesRegex(ValueError, 'positive integer'):
+            module.Dashboard(self.data)
+
+    def test_missing_count_provenance_is_rejected(self):
+        self.data['glossary'][0]['occurrence_count'] = 7
+        with self.assertRaisesRegex(ValueError, 'scope, method, and evidence'):
+            module.Dashboard(self.data)
+
+    def test_multiple_related_terms_are_labeled_under_original_wording(self):
+        record = self.data['thesaurus'][0]
+        record['relations'].append({'target_glossary_id': 'G-002', 'relation_type': 'confused_with', 'explanation': 'A team label differs from a version number.'})
+        card = module.Dashboard(self.data).card(record, 'thesaurus')
+        self.assertIn('Term: Generation number', card)
+        self.assertIn('Related terms:', card)
+        self.assertIn('version identifier', card)
+        self.assertIn('Lantern', card)
+        self.assertIn('How related / important differences:', card)
+
+    def test_related_technologies_are_grouped_without_losing_records(self):
+        record = copy.deepcopy(self.data['related_fields'][0])
+        record['id'] = 'R-004'
+        record['name'] = 'Another related technology'
+        self.data['related_fields'].append(record)
+        output = module.Dashboard(self.data).section('related_fields', 'Related fields', '')
+        self.assertEqual(output.count('class="field-group"'), len(self.data['technology_categories']))
+        self.assertEqual(output.count('class="entry card"'), len(self.data['related_fields']))
+        self.assertIn('Technology: ' + self.data['technology_categories'][0]['name'], output)
+        self.assertIn('Related technologies:', output)
+        self.assertIn('Related technology: Another related technology', output)
+        self.assertIn('How related:', output)
+        self.assertIn('Important differences:', output)
+
+    def test_empty_relations_and_hostile_cloud_labels_remain_readable(self):
+        self.data['thesaurus'][0]['relations'] = []
+        self.data['glossary'][0]['original_wording'] = '<img src=x>'
+        dashboard = module.Dashboard(self.data)
+        self.assertIn('No supported related terms', dashboard.card(self.data['thesaurus'][0], 'thesaurus'))
+        self.assertNotIn('<img src=x>', dashboard.word_cloud())
+
     def test_cli_preserves_input_and_does_not_overwrite_it(self):
         with tempfile.TemporaryDirectory() as folder:
             source = Path(folder) / 'input.json'
